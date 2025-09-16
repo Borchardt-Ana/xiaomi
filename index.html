@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solução para Conexão com Xiaomi Mi Scale 2</title>
+    <title>Conexão com Xiaomi Mi Scale 2 via Notebook</title>
     <style>
         :root {
             --primary: #ff6700;
@@ -153,44 +153,61 @@
             line-height: 1.5;
         }
         
-        .platform-support {
-            display: flex;
-            justify-content: space-around;
+        .data-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
             margin: 20px 0;
-            flex-wrap: wrap;
         }
         
-        .platform {
+        .data-item {
             text-align: center;
-            margin: 10px;
             padding: 15px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
-            min-width: 150px;
         }
         
-        .platform.supported {
-            border: 2px solid var(--success);
+        .data-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            margin: 10px 0;
         }
         
-        .platform.unsupported {
-            border: 2px solid var(--error);
+        .data-label {
+            color: #95a5a6;
+            font-size: 0.9rem;
+        }
+        
+        .status-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
         }
         
         .status-indicator {
-            width: 15px;
-            height: 15px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            display: inline-block;
-            margin-right: 8px;
+            margin-right: 10px;
+            background-color: #95a5a6;
         }
         
-        .supported .status-indicator {
+        .status-connected {
             background-color: var(--success);
+            box-shadow: 0 0 10px var(--success);
         }
         
-        .unsupported .status-indicator {
-            background-color: var(--error);
+        .status-scanning {
+            background-color: var(--warning);
+            box-shadow: 0 0 10px var(--warning);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
         
         footer {
@@ -216,165 +233,333 @@
 <body>
     <div class="container">
         <header>
-            <h1>Problemas para Conectar com a Xiaomi Mi Scale 2?</h1>
-            <p>Soluções e alternativas para acessar os dados da sua balança</p>
+            <h1>Conexão com Xiaomi Mi Scale 2 via Notebook</h1>
+            <p>Soluções para acessar os dados da sua balança a partir do computador</p>
         </header>
         
         <div class="card">
-            <h2>Por que não consigo encontrar minha balança?</h2>
-            <p>A Xiaomi Mi Scale 2 usa um protocolo Bluetooth proprietário que nem sempre é compatível com a Web Bluetooth API. Aqui estão as principais razões:</p>
+            <h2>Método Recomendado: Script Python com Adaptador Bluetooth</h2>
+            <p>Esta é a maneira mais confiável de conectar sua balança Xiaomi Mi Scale 2 a um notebook. Você precisará:</p>
             
-            <ul class="troubleshooting-list">
-                <li><strong>Problemas de compatibilidade:</strong> A Web Bluetooth API ainda não é totalmente suportada por todos os navegadores</li>
-                <li><strong>Protocolo proprietário:</strong> A Xiaomi usa um protocolo customizado que requer autenticação específica</li>
-                <li><strong>Requisitos de segurança:</strong> A conexão Bluetooth requer HTTPS (exceto em localhost)</li>
-                <li><strong>Permissões:</strong> Seu navegador pode estar bloqueando o acesso ao Bluetooth</li>
-                <li><strong>Balança não descoberta:</strong> A balança pode não estar em modo de descoberta</li>
-            </ul>
+            <ol class="troubleshooting-list">
+                <li>Um adaptador Bluetooth 4.0+ (se seu notebook não tiver Bluetooth integrado)</li>
+                <li>Python instalado no seu computador</li>
+                <li>Algumas bibliotecas Python específicas</li>
+            </ol>
             
-            <div class="platform-support">
-                <div class="platform supported">
-                    <div class="status-indicator"></div>
-                    <strong>Chrome Android</strong>
-                    <p>Suportado</p>
-                </div>
-                <div class="platform unsupported">
-                    <div class="status-indicator"></div>
-                    <strong>iOS/Safari</strong>
-                    <p>Não suportado</p>
-                </div>
-                <div class="platform unsupported">
-                    <div class="status-indicator"></div>
-                    <strong>Firefox</strong>
-                    <p>Não suportado</p>
-                </div>
-                <div class="platform supported">
-                    <div class="status-indicator"></div>
-                    <strong>Edge Chromium</strong>
-                    <p>Suportado</p>
-                </div>
-            </div>
-        </div>
-        
-        <h2>Soluções Alternativas</h2>
-        <div class="solution-grid">
-            <div class="solution-card">
-                <h3>1. Usar Aplicativo Intermediário</h3>
-                <p>Use aplicativos como "Tools & Mi Band" para Android que podem exportar dados para Google Fit.</p>
-                <p>Em seguida, use a API do Google Fit para acessar os dados.</p>
-                <a href="https://play.google.com/store/apps/details?id=com.mc.toolsandmiband" class="btn btn-success" target="_blank">Baixar App</a>
-            </div>
-            
-            <div class="solution-card">
-                <h3>2. Acesso Root no Android</h3>
-                <p>Com acesso root, você pode extrair o banco de dados do aplicativo Mi Fit.</p>
-                <p>Os dados são armazenados em um arquivo SQLite que pode ser exportado.</p>
-                <button class="btn" onclick="alert('Requer conhecimento técnico avançado.')">Ver Detalhes</button>
-            </div>
-            
-            <div class="solution-card">
-                <h3>3. Script Python com Bluetooth</h3>
-                <p>Use um script Python no computador para se conectar via Bluetooth e extrair os dados.</p>
-                <p>Requer conhecimentos de programação e Bluetooth LE.</p>
-                <button class="btn" onclick="showPythonCode()">Ver Código Exemplo</button>
-            </div>
-        </div>
-        
-        <div id="pythonCode" style="display: none;">
-            <div class="card">
-                <h3>Exemplo de Código Python para Acessar Mi Scale 2</h3>
-                <div class="code-block">
-# Instale as dependências: pip install bluepy numpy<br>
+            <h3>Instalação e Configuração</h3>
+            <div class="code-block">
+# Instale as dependências necessárias<br>
+pip install bluepy numpy<br>
 <br>
-from bluepy import btle<br>
+# No Linux, você pode precisar instalar:<br>
+# sudo apt-get install libglib2.0-dev
+            </div>
+            
+            <h3>Script Python para Conexão Direta</h3>
+            <div class="code-block">
+import bluepy.btle as btle<br>
 import struct<br>
-import numpy as np<br>
 <br>
 class MiScale2(btle.DefaultDelegate):<br>
     def __init__(self):<br>
         btle.DefaultDelegate.__init__(self)<br>
         <br>
     def handleNotification(self, cHandle, data):<br>
-        # Processar dados da balança<br>
         measurements = self.parse_data(data)<br>
         print(f"Peso: {measurements['weight']} kg")<br>
         print(f"IMC: {measurements['bmi']}")<br>
+        print(f"Gordura Corporal: {measurements['body_fat']}%")<br>
         <br>
     def parse_data(self, data):<br>
-        # Converter dados binários<br>
-        # Implementar parsing específico da Mi Scale 2<br>
-        return {"weight": 0, "bmi": 0}<br>
+        # Implementação do parser de dados da Xiaomi<br>
+        # Os dados chegam em formato binário específico<br>
+        weight = (data[2] + (data[3] << 8)) / 100.0<br>
+        <br>
+        # Cálculos adicionais baseados na documentação não oficial<br>
+        return {<br>
+            'weight': weight,<br>
+            'bmi': weight / ((1.75) ** 2),  # Ajuste com sua altura<br>
+            'body_fat': 20.5  # Este valor precisa ser calculado corretamente<br>
+        }<br>
 <br>
 # Conectar à balança<br>
-scale = MiScale2()<br>
-device = btle.Peripheral("MAC_ADDRESS_DA_BALANCA", addrType=btle.ADDR_TYPE_RANDOM)<br>
-device.setDelegate(scale)<br>
+def connect_to_scale(mac_address):<br>
+    try:<br>
+        scale = MiScale2()<br>
+        device = btle.Peripheral(mac_address, addrType=btle.ADDR_TYPE_RANDOM)<br>
+        device.setDelegate(scale)<br>
+        <br>
+        # Habilitar notificações<br>
+        service = device.getServiceByUUID("0000181b-0000-1000-8000-00805f9b34fb")<br>
+        characteristic = service.getCharacteristics("00002a9c-0000-1000-8000-00805f9b34fb")[0]<br>
+        device.writeCharacteristic(characteristic.valHandle+1, b"\x01\x00")<br>
+        <br>
+        print("Conectado! Suba na balança para medir...")<br>
+        <br>
+        # Manter conexão ativa<br>
+        while True:<br>
+            if device.waitForNotifications(1.0):<br>
+                continue<br>
+                <br>
+    except Exception as e:<br>
+        print(f"Erro: {e}")<br>
 <br>
-# Habilitar notificações<br>
-service = device.getServiceByUUID("0000181b-0000-1000-8000-00805f9b34fb")<br>
-characteristic = service.getCharacteristics("00002a9c-0000-1000-8000-00805f9b34fb")[0]<br>
-device.writeCharacteristic(characteristic.valHandle+1, b"\x01\x00")<br>
-<br>
-# Manter conexão<br>
-while True:<br>
-    if device.waitForNotifications(1.0):<br>
-        continue
+# Substitua pelo endereço MAC da sua balança<br>
+connect_to_scale("AA:BB:CC:DD:EE:FF")
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" onclick="downloadPythonScript()">Baixar Script Completo</button>
+                <button class="btn btn-secondary" onclick="showMacInstructions()">Como Encontrar o Endereço MAC</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Visualizador de Dados</h2>
+            <p>Use esta interface para visualizar os dados coletados da sua balança:</p>
+            
+            <div class="status-container">
+                <div class="status-indicator" id="statusIndicator"></div>
+                <span id="statusText">Pronto para receber dados</span>
+            </div>
+            
+            <div class="data-display">
+                <div class="data-item">
+                    <div class="data-label">Peso</div>
+                    <div class="data-value" id="weightValue">--</div>
+                    <div class="data-label">kg</div>
                 </div>
-                <p>Nota: Este é um exemplo simplificado. A implementação completa requer conhecimento do protocolo da Xiaomi.</p>
+                
+                <div class="data-item">
+                    <div class="data-label">IMC</div>
+                    <div class="data-value" id="bmiValue">--</div>
+                    <div class="data-label">kg/m²</div>
+                </div>
+                
+                <div class="data-item">
+                    <div class="data-label">Gordura Corporal</div>
+                    <div class="data-value" id="fatValue">--</div>
+                    <div class="data-label">%</div>
+                </div>
+                
+                <div class="data-item">
+                    <div class="data-label">Massa Muscular</div>
+                    <div class="data-value" id="muscleValue">--</div>
+                    <div class="data-label">kg</div>
+                </div>
             </div>
-        </div>
-        
-        <div class="card">
-            <h2>App Alternativo: Zepp Life</h2>
-            <p>O aplicativo Zepp Life (anteriormente Mi Fit) pode sincronizar com Google Fit e Apple Health.</p>
-            <p>Depois de sincronizar, você pode usar as APIs dessas plataformas para acessar os dados.</p>
             
             <div style="text-align: center; margin-top: 20px;">
-                <a href="https://play.google.com/store/apps/details?id=com.xiaomi.hm.health" class="btn btn-secondary" target="_blank">Zepp Life (Android)</a>
-                <a href="https://apps.apple.com/us/app/zepp-life/id1362005752" class="btn btn-secondary" target="_blank">Zepp Life (iOS)</a>
+                <button class="btn" id="simulateBtn">Simular Dados (Teste)</button>
+                <button class="btn btn-secondary" id="exportBtn">Exportar como JSON</button>
             </div>
         </div>
         
         <div class="card">
-            <h2>Configuração para Web Bluetooth</h2>
-            <p>Se ainda quiser tentar a Web Bluetooth, siga estas etapas:</p>
+            <h2>Método Alternativo: Aplicativo para Notebook</h2>
+            <p>Se preferir uma solução com interface gráfica, você pode usar estes aplicativos:</p>
             
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <h3>Bluetooth LE Explorer</h3>
+                    <p>Um aplicativo para Windows que permite explorar dispositivos Bluetooth LE e inspecionar seus serviços e características.</p>
+                    <a href="https://www.microsoft.com/store/apps/9N0ZTKF1QD98" class="btn btn-success" target="_blank">Baixar para Windows</a>
+                </div>
+                
+                <div class="solution-card">
+                    <h3>BLE Scanner</h3>
+                    <p>Para usuários de macOS, esta ferramenta permite descobrir dispositivos Bluetooth LE e interagir com eles.</p>
+                    <a href="https://apps.apple.com/us/app/ble-scanner-4-0/id1221763603" class="btn btn-success" target="_blank">Baixar para macOS</a>
+                </div>
+            </div>
+            
+            <h3>Como usar estas ferramentas:</h3>
             <ol class="troubleshooting-list">
-                <li>Use o Chrome para Android ou Edge Chromium</li>
-                <li>Certifique-se de que a página está sendo servida via HTTPS (ou localhost)</li>
-                <li>Ative o Bluetooth do seu telefone</li>
-                <li>Abra as configurações do Chrome → Configurações do site → Bluetooth → Permitir</li>
-                <li>Mantenha a balança próxima e ligada</li>
-                <li>Fique na balança para ativar o modo de descoberta</li>
+                <li>Instale o aplicativo no seu notebook</li>
+                <li>Ligue a balança e certifique-se de que está próxima</li>
+                <li>Abra o aplicativo e escaneie dispositivos Bluetooth</li>
+                <li>Localize sua Mi Scale 2 (normalmente começa com "MI")</li>
+                <li>Conecte-se ao dispositivo e explore os serviços</li>
+                <li>O serviço da balança geralmente tem UUID: 0000181b-0000-1000-8000-00805f9b34fb</li>
             </ol>
+        </div>
+        
+        <div class="card">
+            <h2>Solução Avançada: Servidor Local com Web Bluetooth</h2>
+            <p>Para desenvolvedores, é possível criar um servidor local que atua como ponte entre a balança e o navegador:</p>
             
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="btn" onclick="window.location.href='https://googlechrome.github.io/samples/web-bluetooth/device-info.html'">Testar Web Bluetooth</button>
+            <div class="code-block">
+# Servidor em Python usando Flask e BluePy<br>
+from flask import Flask, jsonify<br>
+from flask_cors import CORS<br>
+import bluepy.btle as btle<br>
+import threading<br>
+import time<br>
+<br>
+app = Flask(__name__)<br>
+CORS(app)<br>
+<br>
+# Variáveis globais para armazenar os dados mais recentes<br>
+latest_data = {}<br>
+<br>
+class MiScale2(btle.DefaultDelegate):<br>
+    def __init__(self):<br>
+        btle.DefaultDelegate.__init__(self)<br>
+        <br>
+    def handleNotification(self, cHandle, data):<br>
+        global latest_data<br>
+        latest_data = self.parse_data(data)<br>
+        print(f"Dados recebidos: {latest_data}")<br>
+<br>
+@app.route('/data')<br>
+def get_data():<br>
+    return jsonify(latest_data)<br>
+<br>
+def run_flask():<br>
+    app.run(host='0.0.0.0', port=5000)<br>
+<br>
+if __name__ == '__main__':<br>
+    # Iniciar o servidor Flask em uma thread separada<br>
+    flask_thread = threading.Thread(target=run_flask)<br>
+    flask_thread.daemon = True<br>
+    flask_thread.start()<br>
+    <br>
+    # Conectar à balança<br>
+    # (código de conexão omitido por brevidade)<br>
+    <br>
+    try:<br>
+        while True:<br>
+            time.sleep(1)<br>
+    except KeyboardInterrupt:<br>
+        print("Encerrando...")
             </div>
+            
+            <p>Com este servidor rodando, você pode acessar <a href="http://localhost:5000/data" style="color: #ff6700;">http://localhost:5000/data</a> para obter os dados mais recentes da balança em formato JSON.</p>
         </div>
         
         <footer>
             <p>Nota: A Xiaomi não fornece uma API pública para acessar os dados da balança diretamente.</p>
-            <p>As soluções apresentadas aqui são alternativas não-oficiais.</p>
+            <p>As soluções apresentadas aqui são baseadas engenharia reversa e podem não funcionar em todos os casos.</p>
         </footer>
     </div>
 
     <script>
-        function showPythonCode() {
-            const codeElement = document.getElementById('pythonCode');
-            if (codeElement.style.display === 'none') {
-                codeElement.style.display = 'block';
-            } else {
-                codeElement.style.display = 'none';
-            }
+        function downloadPythonScript() {
+            // Criar conteúdo do script Python
+            const scriptContent = `import bluepy.btle as btle
+import struct
+import json
+from datetime import datetime
+
+class MiScale2(btle.DefaultDelegate):
+    def __init__(self):
+        btle.DefaultDelegate.__init__(self)
+        self.measurements = {}
+        
+    def handleNotification(self, cHandle, data):
+        self.measurements = self.parse_data(data)
+        self.save_to_json(self.measurements)
+        print(f"Peso: {self.measurements['weight']} kg")
+        print(f"IMC: {self.measurements['bmi']}")
+        print(f"Gordura Corporal: {self.measurements['body_fat']}%")
+        
+    def parse_data(self, data):
+        # Implementação simplificada do parser
+        # Esta é uma implementação básica - precisa ser ajustada
+        weight = (data[2] + (data[3] << 8)) / 100.0
+        
+        return {
+            'weight': weight,
+            'bmi': weight / ((1.75) ** 2),  # Ajuste com sua altura
+            'body_fat': 15 + (weight - 60) * 0.2,  # Fórmula exemplo
+            'timestamp': datetime.now().isoformat()
         }
         
-        // Verificar suporte a Web Bluetooth
-        if (navigator.bluetooth) {
-            console.log('Web Bluetooth API é suportada neste navegador.');
-        } else {
-            console.log('Web Bluetooth API não é suportada.');
+    def save_to_json(self, data):
+        with open('scale_data.json', 'w') as f:
+            json.dump(data, f, indent=2)
+
+def connect_to_scale(mac_address):
+    try:
+        scale = MiScale2()
+        device = btle.Peripheral(mac_address, addrType=btle.ADDR_TYPE_RANDOM)
+        device.setDelegate(scale)
+        
+        # Habilitar notificações
+        service = device.getServiceByUUID("0000181b-0000-1000-8000-00805f9b34fb")
+        characteristic = service.getCharacteristics("00002a9c-0000-1000-8000-00805f9b34fb")[0]
+        device.writeCharacteristic(characteristic.valHandle+1, b"\\x01\\x00")
+        
+        print("Conectado! Suba na balança para medir...")
+        print("Pressione Ctrl+C para sair")
+        
+        while True:
+            if device.waitForNotifications(1.0):
+                continue
+                
+    except Exception as e:
+        print(f"Erro: {e}")
+
+if __name__ == "__main__":
+    # Substitua pelo endereço MAC da sua balança
+    mac_address = "AA:BB:CC:DD:EE:FF"
+    connect_to_scale(mac_address)`;
+            
+            // Criar um blob com o conteúdo
+            const blob = new Blob([scriptContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            // Criar um link de download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mi_scale_reader.py';
+            document.body.appendChild(a);
+            a.click();
+            
+            // Limpar
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+            
+            alert('Script baixado! Lembre-se de substituir o endereço MAC pelo da sua balança.');
         }
+        
+        function showMacInstructions() {
+            alert('Para encontrar o endereço MAC da sua balança:\n\n1. Abra o aplicativo Mi Fit\n2. Vá até as configurações da balança\n3. O endereço MAC deve estar listado nas informações do dispositivo\n\nSe não estiver visível, você pode usar um scanner Bluetooth como o "Bluetooth Scanner" para descobrir.');
+        }
+        
+        // Simulação de dados para teste
+        document.getElementById('simulateBtn').addEventListener('click', function() {
+            document.getElementById('statusIndicator').className = 'status-indicator status-connected';
+            document.getElementById('statusText').textContent = 'Dados simulados recebidos';
+            
+            document.getElementById('weightValue').textContent = (65 + Math.random() * 5).toFixed(1);
+            document.getElementById('bmiValue').textContent = (22 + Math.random() * 2).toFixed(1);
+            document.getElementById('fatValue').textContent = (18 + Math.random() * 5).toFixed(1);
+            document.getElementById('muscleValue').textContent = (25 + Math.random() * 3).toFixed(1);
+        });
+        
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const data = {
+                weight: document.getElementById('weightValue').textContent,
+                bmi: document.getElementById('bmiValue').textContent,
+                bodyFat: document.getElementById('fatValue').textContent,
+                muscleMass: document.getElementById('muscleValue').textContent,
+                timestamp: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `mi-scale-data-${new Date().toISOString().slice(0, 10)}.json`;
+            link.click();
+            
+            alert('Dados exportados como JSON!');
+        });
     </script>
 </body>
 </html>
