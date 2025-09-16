@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Dados de Saúde - Xiaomi Mi Scale 2</title>
+    <title>Conexão Direta com Xiaomi Mi Scale 2</title>
     <style>
         :root {
-            --primary: #3498db;
-            --secondary: #2ecc71;
+            --primary: #ff6700;
+            --secondary: #3498db;
             --accent: #e74c3c;
             --light: #f9f9f9;
             --dark: #333;
             --gray: #95a5a6;
+            --success: #2ecc71;
+            --warning: #f39c12;
         }
         
         * {
@@ -22,126 +24,232 @@
         }
         
         body {
-            background-color: #f5f7fa;
-            color: var(--dark);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background-attachment: fixed;
+            color: white;
             line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
         
         header {
             text-align: center;
             padding: 20px 0;
             margin-bottom: 30px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
         h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+        .description {
             margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.6;
         }
         
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
         }
         
         .card h2 {
             color: var(--primary);
             margin-bottom: 15px;
+            display: flex;
+            align-items: center;
         }
         
-        .value {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--secondary);
+        .card h2 i {
+            margin-right: 10px;
         }
         
-        .unit {
-            font-size: 1rem;
-            color: var(--gray);
+        .connection-status {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
         }
         
-        .chart-container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+        .status-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: var(--gray);
         }
         
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .status-connected {
+            background-color: var(--success);
+            box-shadow: 0 0 10px var(--success);
         }
         
-        .data-table th, .data-table td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+        .status-scanning {
+            background-color: var(--warning);
+            box-shadow: 0 0 10px var(--warning);
+            animation: pulse 1.5s infinite;
         }
         
-        .data-table th {
-            background-color: var(--primary);
-            color: white;
-        }
-        
-        .data-table tr:nth-child(even) {
-            background-color: #f3f3f3;
-        }
-        
-        .import-section {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
         
         .btn {
             display: inline-block;
             background: var(--primary);
             color: white;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border: none;
-            border-radius: 5px;
+            border-radius: 50px;
             cursor: pointer;
             font-size: 1rem;
-            transition: background 0.3s;
+            transition: all 0.3s;
+            margin: 10px 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
         
         .btn:hover {
-            background: #2980b9;
+            background: #ff8533;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background: #5dade2;
+        }
+        
+        .data-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .data-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .data-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            margin: 10px 0;
+        }
+        
+        .data-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 1s;
+        }
+        
+        .log-container {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .log-time {
+            color: var(--gray);
+            margin-right: 10px;
+        }
+        
+        .log-info {
+            color: var(--secondary);
+        }
+        
+        .log-success {
+            color: var(--success);
+        }
+        
+        .log-warning {
+            color: var(--warning);
+        }
+        
+        .log-error {
+            color: var(--accent);
         }
         
         footer {
             text-align: center;
             margin-top: 40px;
             padding: 20px;
-            color: var(--gray);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
         }
         
         @media (max-width: 768px) {
-            .dashboard {
+            .data-display {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .data-display {
                 grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
             }
         }
     </style>
@@ -149,114 +257,186 @@
 <body>
     <div class="container">
         <header>
-            <h1>Meus Dados de Saúde</h1>
-            <p>Compartilhamento de dados da Xiaomi Mi Scale 2</p>
+            <h1>Conexão Direta com Xiaomi Mi Scale 2</h1>
+            <p class="description">Esta demonstração simula o acesso direto aos dados da balança via Bluetooth Web API</p>
         </header>
         
-        <div class="dashboard">
-            <div class="card">
-                <h2>Peso Atual</h2>
-                <div class="value">68.5<span class="unit">kg</span></div>
-                <p>Variação: -1.2kg desde o último mês</p>
+        <div class="card">
+            <h2><i>🔍</i> Detecção da Balança</h2>
+            <div class="connection-status">
+                <div class="status-indicator" id="statusIndicator"></div>
+                <span id="statusText">Pronto para conectar</span>
             </div>
-            
-            <div class="card">
-                <h2>IMC</h2>
-                <div class="value">22.3<span class="unit">kg/m²</span></div>
-                <p>Peso saudável</p>
-            </div>
-            
-            <div class="card">
-                <h2>Gordura Corporal</h2>
-                <div class="value">18.2<span class="unit">%</span></div>
-                <p>Dentro da faixa ideal</p>
-            </div>
-        </div>
-        
-        <div class="chart-container">
-            <h2>Evolução do Peso</h2>
-            <p>Este gráfico mostra sua progressão ao longo do tempo (dados demonstrativos)</p>
-            <div style="height: 300px; background: #f3f3f3; display: flex; align-items: center; justify-content: center; border-radius: 5px; margin-top: 20px;">
-                <p>Área para gráfico de evolução de peso</p>
-            </div>
-        </div>
-        
-        <div class="import-section">
-            <h2>Como importar seus dados</h2>
-            <p>Atualmente, a Xiaomi não fornece uma maneira direta de exportar dados da Mi Scale 2 para sites externos. Aqui estão algumas alternativas:</p>
-            
-            <h3>Opção 1: Usar aplicativo intermediário</h3>
-            <ol>
-                <li>Instale o aplicativo "Tools & Mi Band" ou "Notify for Mi Band"</li>
-                <li>Conecte sua balança a esse aplicativo</li>
-                <li>Exporte os dados para o Google Fit ou Apple Health</li>
-                <li>Use serviços que se integram com essas plataformas</li>
+            <p>Para conectar diretamente com sua Xiaomi Mi Scale 2, você precisa:</p>
+            <ol style="margin-left: 20px; margin-top: 10px;">
+                <li>Ativar o Bluetooth no seu dispositivo</li>
+                <li>Permitir que o navegador acesse o Bluetooth</li>
+                <li>Ter a balança por perto e ligada</li>
             </ol>
             
-            <h3>Opção 2: Exportação manual</h3>
-            <ol>
-                <li>Abra o aplicativo Mi Home</li>
-                <li>Vá para a seção de históricos de peso</li>
-                <li>Faça capturas de tela dos dados</li>
-                <li>Compartilhe as imagens manualmente</li>
-            </ol>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" id="scanBtn">Procurar Dispositivos</button>
+                <button class="btn btn-secondary" id="connectBtn">Conectar à Balança</button>
+                <button class="btn" id="simulateBtn">Simular Leitura (Demo)</button>
+            </div>
             
-            <h3>Opção 3: Solução técnica (para desenvolvedores)</h3>
-            <p>É possível acessar os dados via Bluetooth usando bibliotecas JavaScript, mas isso requer conhecimentos avançados de programação.</p>
-            
-            <button class="btn">Upload de Dados Manuais</button>
+            <div class="progress-bar">
+                <div class="progress" id="connectionProgress"></div>
+            </div>
         </div>
         
-        <div class="chart-container">
-            <h2>Histórico de Medições</h2>
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Peso (kg)</th>
-                        <th>IMC</th>
-                        <th>Gordura Corporal (%)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>10/05/2023</td>
-                        <td>68.5</td>
-                        <td>22.3</td>
-                        <td>18.2</td>
-                    </tr>
-                    <tr>
-                        <td>09/05/2023</td>
-                        <td>68.7</td>
-                        <td>22.4</td>
-                        <td>18.3</td>
-                    </tr>
-                    <tr>
-                        <td>08/05/2023</td>
-                        <td>69.2</td>
-                        <td>22.6</td>
-                        <td>18.5</td>
-                    </tr>
-                    <tr>
-                        <td>07/05/2023</td>
-                        <td>69.0</td>
-                        <td>22.5</td>
-                        <td>18.4</td>
-                    </tr>
-                    <tr>
-                        <td>06/05/2023</td>
-                        <td>69.7</td>
-                        <td>22.7</td>
-                        <td>18.7</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="card">
+            <h2><i>📊</i> Dados da Balança</h2>
+            <div class="data-display">
+                <div class="data-item">
+                    <div class="data-label">Peso</div>
+                    <div class="data-value" id="weightValue">--</div>
+                    <div class="data-label">kg</div>
+                </div>
+                
+                <div class="data-item">
+                    <div class="data-label">IMC</div>
+                    <div class="data-value" id="bmiValue">--</div>
+                    <div class="data-label">kg/m²</div>
+                </div>
+                
+                <div class="data-item">
+                    <div class="data-label">Gordura Corporal</div>
+                    <div class="data-value" id="fatValue">--</div>
+                    <div class="data-label">%</div>
+                </div>
+                
+                <div class="data-item">
+                    <div class="data-label">Massa Muscular</div>
+                    <div class="data-value" id="muscleValue">--</div>
+                    <div class="data-label">kg</div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" id="shareBtn">Compartilhar Dados</button>
+                <button class="btn btn-secondary" id="exportBtn">Exportar como JSON</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2><i>📝</i> Log de Atividade</h2>
+            <div class="log-container" id="logContainer">
+                <div class="log-entry">
+                    <span class="log-time">10:45:00</span>
+                    <span class="log-info">Sistema inicializado. Pronto para conexão.</span>
+                </div>
+            </div>
         </div>
         
         <footer>
-            <p>Esta é uma demonstração visual. A integração real com a Xiaomi Mi Scale 2 requer soluções de terceiros ou conhecimentos técnicos.</p>
-            <p>© 2023 - Dashboard de Saúde</p>
+            <p>Nota: Esta é uma demonstração simulada. A conexão real requer a Web Bluetooth API, que não está totalmente disponível em todos os navegadores.</p>
+            <p>© 2023 - Demonstração de Acesso à Xiaomi Mi Scale 2</p>
         </footer>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusIndicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            const scanBtn = document.getElementById('scanBtn');
+            const connectBtn = document.getElementById('connectBtn');
+            const simulateBtn = document.getElementById('simulateBtn');
+            const shareBtn = document.getElementById('shareBtn');
+            const exportBtn = document.getElementById('exportBtn');
+            const connectionProgress = document.getElementById('connectionProgress');
+            const logContainer = document.getElementById('logContainer');
+            
+            // Elementos de dados
+            const weightValue = document.getElementById('weightValue');
+            const bmiValue = document.getElementById('bmiValue');
+            const fatValue = document.getElementById('fatValue');
+            const muscleValue = document.getElementById('muscleValue');
+            
+            // Adicionar entrada de log
+            function addLog(message, type = 'info') {
+                const now = new Date();
+                const timeString = now.toTimeString().split(' ')[0];
+                const logEntry = document.createElement('div');
+                logEntry.className = 'log-entry';
+                logEntry.innerHTML = `<span class="log-time">${timeString}</span> <span class="log-${type}">${message}</span>`;
+                logContainer.appendChild(logEntry);
+                logContainer.scrollTop = logContainer.scrollHeight;
+            }
+            
+            // Simular progresso de conexão
+            function simulateProgress() {
+                let width = 0;
+                const interval = setInterval(() => {
+                    if (width >= 100) {
+                        clearInterval(interval);
+                        statusIndicator.className = 'status-indicator status-connected';
+                        statusText.textContent = 'Conectado à Xiaomi Mi Scale 2';
+                        connectionProgress.style.width = '100%';
+                        addLog('Conexão estabelecida com sucesso.', 'success');
+                        simulateData();
+                    } else {
+                        width += 5;
+                        connectionProgress.style.width = width + '%';
+                    }
+                }, 100);
+            }
+            
+            // Simular dados da balança
+            function simulateData() {
+                weightValue.textContent = (65 + Math.random() * 5).toFixed(1);
+                bmiValue.textContent = (22 + Math.random() * 2).toFixed(1);
+                fatValue.textContent = (18 + Math.random() * 5).toFixed(1);
+                muscleValue.textContent = (25 + Math.random() * 3).toFixed(1);
+                
+                addLog('Dados recebidos da balança.', 'success');
+            }
+            
+            // Event Listeners
+            scanBtn.addEventListener('click', function() {
+                statusIndicator.className = 'status-indicator status-scanning';
+                statusText.textContent = 'Procurando dispositivos...';
+                addLog('Procurando dispositivos Bluetooth...');
+                
+                setTimeout(function() {
+                    addLog('Dispositivo encontrado: Xiaomi Mi Scale 2 (A4:C1:38:12:34:56)', 'success');
+                    statusText.textContent = 'Dispositivo encontrado!';
+                }, 2000);
+            });
+            
+            connectBtn.addEventListener('click', function() {
+                statusIndicator.className = 'status-indicator status-scanning';
+                statusText.textContent = 'Conectando...';
+                addLog('Iniciando conexão com Xiaomi Mi Scale 2...');
+                
+                simulateProgress();
+            });
+            
+            simulateBtn.addEventListener('click', function() {
+                statusIndicator.className = 'status-indicator status-scanning';
+                statusText.textContent = 'Simulando conexão...';
+                addLog('Simulando conexão e leitura de dados...');
+                
+                simulateProgress();
+            });
+            
+            shareBtn.addEventListener('click', function() {
+                addLog('Compartilhando dados...');
+                alert('Funcionalidade de compartilhamento seria implementada aqui!');
+            });
+            
+            exportBtn.addEventListener('click', function() {
+                addLog('Exportando dados como JSON...');
+                alert('Dados exportados como JSON (simulação)');
+            });
+            
+            // Verificar suporte a Bluetooth Web API
+            if (navigator.bluetooth) {
+                addLog('Web Bluetooth API é suportada neste navegador.', 'success');
+            } else {
+                addLog('Web Bluetooth API não é suportada neste navegador. Use Chrome ou Edge.', 'error');
+            }
+        });
+    </script>
 </body>
 </html>
