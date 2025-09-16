@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conexão Direta com Xiaomi Mi Scale 2</title>
+    <title>Conexão Real com Xiaomi Mi Scale 2</title>
     <style>
         :root {
             --primary: #ff6700;
             --secondary: #3498db;
-            --accent: #e74c3c;
-            --light: #f9f9f9;
-            --dark: #333;
-            --gray: #95a5a6;
             --success: #2ecc71;
             --warning: #f39c12;
+            --error: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
         }
         
         * {
@@ -25,7 +24,6 @@
         
         body {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
-            background-attachment: fixed;
             color: white;
             line-height: 1.6;
             padding: 20px;
@@ -33,7 +31,7 @@
         }
         
         .container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 15px;
@@ -54,13 +52,6 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
         
-        .description {
-            margin-bottom: 30px;
-            text-align: center;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-        
         .card {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -77,11 +68,7 @@
             align-items: center;
         }
         
-        .card h2 i {
-            margin-right: 10px;
-        }
-        
-        .connection-status {
+        .status-container {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
@@ -92,7 +79,7 @@
             height: 20px;
             border-radius: 50%;
             margin-right: 10px;
-            background-color: var(--gray);
+            background-color: #95a5a6;
         }
         
         .status-connected {
@@ -146,8 +133,8 @@
         
         .data-display {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
             margin: 20px 0;
         }
         
@@ -159,31 +146,15 @@
         }
         
         .data-value {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
             color: white;
             margin: 10px 0;
         }
         
         .data-label {
-            color: var(--gray);
+            color: #95a5a6;
             font-size: 0.9rem;
-        }
-        
-        .progress-bar {
-            height: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-        
-        .progress {
-            height: 100%;
-            background: var(--primary);
-            border-radius: 5px;
-            width: 0%;
-            transition: width 1s;
         }
         
         .log-container {
@@ -204,7 +175,7 @@
         }
         
         .log-time {
-            color: var(--gray);
+            color: #95a5a6;
             margin-right: 10px;
         }
         
@@ -221,7 +192,7 @@
         }
         
         .log-error {
-            color: var(--accent);
+            color: var(--error);
         }
         
         footer {
@@ -257,36 +228,25 @@
 <body>
     <div class="container">
         <header>
-            <h1>Conexão Direta com Xiaomi Mi Scale 2</h1>
-            <p class="description">Esta demonstração simula o acesso direto aos dados da balança via Bluetooth Web API</p>
+            <h1>Conexão Real com Xiaomi Mi Scale 2</h1>
+            <p>Interface para acesso direto aos dados da balança via Web Bluetooth API</p>
         </header>
         
         <div class="card">
-            <h2><i>🔍</i> Detecção da Balança</h2>
-            <div class="connection-status">
+            <h2>Conexão Bluetooth</h2>
+            <div class="status-container">
                 <div class="status-indicator" id="statusIndicator"></div>
                 <span id="statusText">Pronto para conectar</span>
             </div>
-            <p>Para conectar diretamente com sua Xiaomi Mi Scale 2, você precisa:</p>
-            <ol style="margin-left: 20px; margin-top: 10px;">
-                <li>Ativar o Bluetooth no seu dispositivo</li>
-                <li>Permitir que o navegador acesse o Bluetooth</li>
-                <li>Ter a balança por perto e ligada</li>
-            </ol>
             
             <div style="text-align: center; margin-top: 20px;">
-                <button class="btn" id="scanBtn">Procurar Dispositivos</button>
-                <button class="btn btn-secondary" id="connectBtn">Conectar à Balança</button>
-                <button class="btn" id="simulateBtn">Simular Leitura (Demo)</button>
-            </div>
-            
-            <div class="progress-bar">
-                <div class="progress" id="connectionProgress"></div>
+                <button class="btn" id="connectBtn">Conectar à Balança</button>
+                <button class="btn btn-secondary" id="disconnectBtn">Desconectar</button>
             </div>
         </div>
         
         <div class="card">
-            <h2><i>📊</i> Dados da Balança</h2>
+            <h2>Dados da Balança</h2>
             <div class="data-display">
                 <div class="data-item">
                     <div class="data-label">Peso</div>
@@ -320,18 +280,18 @@
         </div>
         
         <div class="card">
-            <h2><i>📝</i> Log de Atividade</h2>
+            <h2>Log de Atividade</h2>
             <div class="log-container" id="logContainer">
                 <div class="log-entry">
-                    <span class="log-time">10:45:00</span>
+                    <span class="log-time" id="currentTime"></span>
                     <span class="log-info">Sistema inicializado. Pronto para conexão.</span>
                 </div>
             </div>
         </div>
         
         <footer>
-            <p>Nota: Esta é uma demonstração simulada. A conexão real requer a Web Bluetooth API, que não está totalmente disponível em todos os navegadores.</p>
-            <p>© 2023 - Demonstração de Acesso à Xiaomi Mi Scale 2</p>
+            <p>Nota: Esta interface utiliza a Web Bluetooth API para conexão direta com a balança.</p>
+            <p>Funciona melhor no Chrome para Android. Certifique-se de que a balança está ligada e próxima.</p>
         </footer>
     </div>
 
@@ -339,19 +299,33 @@
         document.addEventListener('DOMContentLoaded', function() {
             const statusIndicator = document.getElementById('statusIndicator');
             const statusText = document.getElementById('statusText');
-            const scanBtn = document.getElementById('scanBtn');
             const connectBtn = document.getElementById('connectBtn');
-            const simulateBtn = document.getElementById('simulateBtn');
+            const disconnectBtn = document.getElementById('disconnectBtn');
             const shareBtn = document.getElementById('shareBtn');
             const exportBtn = document.getElementById('exportBtn');
-            const connectionProgress = document.getElementById('connectionProgress');
             const logContainer = document.getElementById('logContainer');
+            const currentTime = document.getElementById('currentTime');
             
             // Elementos de dados
             const weightValue = document.getElementById('weightValue');
             const bmiValue = document.getElementById('bmiValue');
             const fatValue = document.getElementById('fatValue');
             const muscleValue = document.getElementById('muscleValue');
+            
+            // UUIDs do serviço e característica da balança Xiaomi
+            const MI_SCALE_SERVICE = '0000181b-0000-1000-8000-00805f9b34fb';
+            const MI_SCALE_CHARACTERISTIC = '00002a9c-0000-1000-8000-00805f9b34fb';
+            
+            let device = null;
+            let characteristic = null;
+            
+            // Atualizar o tempo atual
+            function updateTime() {
+                const now = new Date();
+                currentTime.textContent = now.toTimeString().split(' ')[0];
+            }
+            setInterval(updateTime, 1000);
+            updateTime();
             
             // Adicionar entrada de log
             function addLog(message, type = 'info') {
@@ -364,77 +338,215 @@
                 logContainer.scrollTop = logContainer.scrollHeight;
             }
             
-            // Simular progresso de conexão
-            function simulateProgress() {
-                let width = 0;
-                const interval = setInterval(() => {
-                    if (width >= 100) {
-                        clearInterval(interval);
-                        statusIndicator.className = 'status-indicator status-connected';
-                        statusText.textContent = 'Conectado à Xiaomi Mi Scale 2';
-                        connectionProgress.style.width = '100%';
-                        addLog('Conexão estabelecida com sucesso.', 'success');
-                        simulateData();
-                    } else {
-                        width += 5;
-                        connectionProgress.style.width = width + '%';
+            // Conectar à balança
+            async function connectToScale() {
+                try {
+                    if (!navigator.bluetooth) {
+                        addLog('Web Bluetooth API não é suportada neste navegador.', 'error');
+                        return;
                     }
-                }, 100);
+                    
+                    statusIndicator.className = 'status-indicator status-scanning';
+                    statusText.textContent = 'Procurando dispositivos...';
+                    addLog('Procurando dispositivos Bluetooth...');
+                    
+                    device = await navigator.bluetooth.requestDevice({
+                        filters: [
+                            { services: [MI_SCALE_SERVICE] },
+                            { name: 'MI Scale 2' }
+                        ],
+                        optionalServices: [MI_SCALE_SERVICE]
+                    });
+                    
+                    addLog(`Dispositivo selecionado: ${device.name || 'Desconhecido'}`, 'success');
+                    
+                    statusText.textContent = 'Conectando...';
+                    addLog('Conectando ao dispositivo...');
+                    
+                    const server = await device.gatt.connect();
+                    
+                    statusText.textContent = 'Buscando serviço...';
+                    addLog('Buscando serviço da balança...');
+                    
+                    const service = await server.getPrimaryService(MI_SCALE_SERVICE);
+                    
+                    statusText.textContent = 'Buscando característica...';
+                    addLog('Buscando característica de dados...');
+                    
+                    characteristic = await service.getCharacteristic(MI_SCALE_CHARACTERISTIC);
+                    
+                    statusIndicator.className = 'status-indicator status-connected';
+                    statusText.textContent = 'Conectado! Aguardando dados...';
+                    addLog('Conectado com sucesso! Aguardando dados da balança.', 'success');
+                    
+                    // Iniciar notificações
+                    await characteristic.startNotifications();
+                    addLog('Notificações ativadas. Suba na balança para medir.');
+                    
+                    characteristic.addEventListener('characteristicvaluechanged', handleScaleData);
+                    
+                    // Listen for disconnection
+                    device.addEventListener('gattserverdisconnected', onDisconnected);
+                    
+                } catch (error) {
+                    addLog(`Erro na conexão: ${error.message}`, 'error');
+                    statusIndicator.className = 'status-indicator';
+                    statusText.textContent = 'Erro na conexão';
+                    console.error('Erro na conexão Bluetooth:', error);
+                }
             }
             
-            // Simular dados da balança
-            function simulateData() {
-                weightValue.textContent = (65 + Math.random() * 5).toFixed(1);
-                bmiValue.textContent = (22 + Math.random() * 2).toFixed(1);
-                fatValue.textContent = (18 + Math.random() * 5).toFixed(1);
-                muscleValue.textContent = (25 + Math.random() * 3).toFixed(1);
+            // Manipular dados recebidos da balança
+            function handleScaleData(event) {
+                const value = event.target.value;
+                const data = new Uint8Array(value.buffer);
                 
-                addLog('Dados recebidos da balança.', 'success');
+                addLog(`Dados recebidos: ${Array.from(data).map(b => b.toString(16).padStart(2, '0')).join(' ')}`);
+                
+                // Decodificar dados da balança Xiaomi
+                // O formato dos dados é: [0x01, flags, peso (3 bytes), IMC (2 bytes), ...]
+                if (data.length >= 13) {
+                    const flags = data[1];
+                    
+                    // Calcular peso (3 bytes, little endian, dividido por 200)
+                    const weight = ((data[2] | (data[3] << 8) | (data[4] << 16)) * 0.01).toFixed(2);
+                    weightValue.textContent = weight;
+                    
+                    // Calcular IMC (2 bytes, little endian, dividido por 10)
+                    if (data.length >= 7) {
+                        const bmi = ((data[5] | (data[6] << 8)) * 0.1).toFixed(1);
+                        bmiValue.textContent = bmi;
+                    }
+                    
+                    // Verificar se há dados de gordura corporal (depende das flags)
+                    if (data.length >= 13 && (flags & 0x04)) {
+                        // Gordura corporal (2 bytes, little endian, dividido por 10)
+                        const bodyFat = ((data[9] | (data[10] << 8)) * 0.1).toFixed(1);
+                        fatValue.textContent = bodyFat;
+                        
+                        // Massa muscular (2 bytes, little endian, dividido por 10)
+                        const muscleMass = ((data[11] | (data[12] << 8)) * 0.1).toFixed(1);
+                        muscleValue.textContent = muscleMass;
+                    }
+                    
+                    addLog(`Medição recebida: ${weight} kg, IMC: ${bmiValue.textContent}`, 'success');
+                }
+            }
+            
+            // Manipular desconexão
+            function onDisconnected() {
+                addLog('Dispositivo desconectado.', 'warning');
+                statusIndicator.className = 'status-indicator';
+                statusText.textContent = 'Desconectado';
+                
+                // Limpar dados
+                weightValue.textContent = '--';
+                bmiValue.textContent = '--';
+                fatValue.textContent = '--';
+                muscleValue.textContent = '--';
+            }
+            
+            // Desconectar da balança
+            async function disconnectFromScale() {
+                if (!device) {
+                    addLog('Nenhum dispositivo conectado.', 'warning');
+                    return;
+                }
+                
+                if (device.gatt.connected) {
+                    if (characteristic) {
+                        try {
+                            await characteristic.stopNotifications();
+                        } catch (error) {
+                            console.error('Erro ao parar notificações:', error);
+                        }
+                    }
+                    
+                    device.gatt.disconnect();
+                    addLog('Desconectado deliberadamente.', 'info');
+                } else {
+                    addLog('Dispositivo já está desconectado.', 'info');
+                }
+                
+                statusIndicator.className = 'status-indicator';
+                statusText.textContent = 'Desconectado';
+                
+                // Limpar dados
+                weightValue.textContent = '--';
+                bmiValue.textContent = '--';
+                fatValue.textContent = '--';
+                muscleValue.textContent = '--';
+            }
+            
+            // Compartilhar dados
+            function shareData() {
+                if (weightValue.textContent === '--') {
+                    addLog('Nenhum dado para compartilhar.', 'warning');
+                    return;
+                }
+                
+                const data = {
+                    weight: weightValue.textContent,
+                    bmi: bmiValue.textContent,
+                    bodyFat: fatValue.textContent,
+                    muscleMass: muscleValue.textContent,
+                    timestamp: new Date().toISOString()
+                };
+                
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Dados da Balança Xiaomi',
+                        text: `Peso: ${data.weight} kg, IMC: ${data.bmi}, Gordura Corporal: ${data.bodyFat}%`,
+                        url: window.location.href
+                    })
+                    .then(() => addLog('Dados compartilhados com sucesso!', 'success'))
+                    .catch(error => addLog(`Erro ao compartilhar: ${error.message}`, 'error'));
+                } else {
+                    addLog('API de compartilhamento não suportada neste navegador.', 'warning');
+                    // Fallback: copiar para área de transferência
+                    const text = `Peso: ${data.weight} kg\nIMC: ${data.bmi}\nGordura Corporal: ${data.bodyFat}%\nMassa Muscular: ${data.muscleMass} kg`;
+                    navigator.clipboard.writeText(text)
+                        .then(() => addLog('Dados copiados para a área de transferência!', 'success'))
+                        .catch(err => addLog('Falha ao copiar dados.', 'error'));
+                }
+            }
+            
+            // Exportar dados como JSON
+            function exportData() {
+                if (weightValue.textContent === '--') {
+                    addLog('Nenhum dado para exportar.', 'warning');
+                    return;
+                }
+                
+                const data = {
+                    weight: weightValue.textContent,
+                    bmi: bmiValue.textContent,
+                    bodyFat: fatValue.textContent,
+                    muscleMass: muscleValue.textContent,
+                    timestamp: new Date().toISOString()
+                };
+                
+                const dataStr = JSON.stringify(data, null, 2);
+                const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(dataBlob);
+                link.download = `mi-scale-data-${new Date().toISOString().slice(0, 10)}.json`;
+                link.click();
+                
+                addLog('Dados exportados como JSON.', 'success');
             }
             
             // Event Listeners
-            scanBtn.addEventListener('click', function() {
-                statusIndicator.className = 'status-indicator status-scanning';
-                statusText.textContent = 'Procurando dispositivos...';
-                addLog('Procurando dispositivos Bluetooth...');
-                
-                setTimeout(function() {
-                    addLog('Dispositivo encontrado: Xiaomi Mi Scale 2 (A4:C1:38:12:34:56)', 'success');
-                    statusText.textContent = 'Dispositivo encontrado!';
-                }, 2000);
-            });
-            
-            connectBtn.addEventListener('click', function() {
-                statusIndicator.className = 'status-indicator status-scanning';
-                statusText.textContent = 'Conectando...';
-                addLog('Iniciando conexão com Xiaomi Mi Scale 2...');
-                
-                simulateProgress();
-            });
-            
-            simulateBtn.addEventListener('click', function() {
-                statusIndicator.className = 'status-indicator status-scanning';
-                statusText.textContent = 'Simulando conexão...';
-                addLog('Simulando conexão e leitura de dados...');
-                
-                simulateProgress();
-            });
-            
-            shareBtn.addEventListener('click', function() {
-                addLog('Compartilhando dados...');
-                alert('Funcionalidade de compartilhamento seria implementada aqui!');
-            });
-            
-            exportBtn.addEventListener('click', function() {
-                addLog('Exportando dados como JSON...');
-                alert('Dados exportados como JSON (simulação)');
-            });
+            connectBtn.addEventListener('click', connectToScale);
+            disconnectBtn.addEventListener('click', disconnectFromScale);
+            shareBtn.addEventListener('click', shareData);
+            exportBtn.addEventListener('click', exportData);
             
             // Verificar suporte a Bluetooth Web API
-            if (navigator.bluetooth) {
-                addLog('Web Bluetooth API é suportada neste navegador.', 'success');
-            } else {
-                addLog('Web Bluetooth API não é suportada neste navegador. Use Chrome ou Edge.', 'error');
+            if (!navigator.bluetooth) {
+                addLog('Web Bluetooth API não é suportada neste navegador. Use Chrome ou Edge para Android.', 'error');
+                connectBtn.disabled = true;
             }
         });
     </script>
