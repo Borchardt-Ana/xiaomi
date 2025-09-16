@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Dados de Saúde - Xiaomi Mi Scale 2</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --light: #f9f9f9;
+            --dark: #333;
+            --gray: #95a5a6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .unit {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .data-table th, .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .data-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background-color: #f3f3f3;
+        }
+        
+        .import-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: var(--gray);
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Meus Dados de Saúde</h1>
+            <p>Compartilhamento de dados da Xiaomi Mi Scale 2</p>
+        </header>
+        
+        <div class="dashboard">
+            <div class="card">
+                <h2>Peso Atual</h2>
+                <div class="value">68.5<span class="unit">kg</span></div>
+                <p>Variação: -1.2kg desde o último mês</p>
+            </div>
+            
+            <div class="card">
+                <h2>IMC</h2>
+                <div class="value">22.3<span class="unit">kg/m²</span></div>
+                <p>Peso saudável</p>
+            </div>
+            
+            <div class="card">
+                <h2>Gordura Corporal</h2>
+                <div class="value">18.2<span class="unit">%</span></div>
+                <p>Dentro da faixa ideal</p>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <h2>Evolução do Peso</h2>
+            <p>Este gráfico mostra sua progressão ao longo do tempo (dados demonstrativos)</p>
+            <div style="height: 300px; background: #f3f3f3; display: flex; align-items: center; justify-content: center; border-radius: 5px; margin-top: 20px;">
+                <p>Área para gráfico de evolução de peso</p>
+            </div>
+        </div>
+        
+        <div class="import-section">
+            <h2>Como importar seus dados</h2>
+            <p>Atualmente, a Xiaomi não fornece uma maneira direta de exportar dados da Mi Scale 2 para sites externos. Aqui estão algumas alternativas:</p>
+            
+            <h3>Opção 1: Usar aplicativo intermediário</h3>
+            <ol>
+                <li>Instale o aplicativo "Tools & Mi Band" ou "Notify for Mi Band"</li>
+                <li>Conecte sua balança a esse aplicativo</li>
+                <li>Exporte os dados para o Google Fit ou Apple Health</li>
+                <li>Use serviços que se integram com essas plataformas</li>
+            </ol>
+            
+            <h3>Opção 2: Exportação manual</h3>
+            <ol>
+                <li>Abra o aplicativo Mi Home</li>
+                <li>Vá para a seção de históricos de peso</li>
+                <li>Faça capturas de tela dos dados</li>
+                <li>Compartilhe as imagens manualmente</li>
+            </ol>
+            
+            <h3>Opção 3: Solução técnica (para desenvolvedores)</h3>
+            <p>É possível acessar os dados via Bluetooth usando bibliotecas JavaScript, mas isso requer conhecimentos avançados de programação.</p>
+            
+            <button class="btn">Upload de Dados Manuais</button>
+        </div>
+        
+        <div class="chart-container">
+            <h2>Histórico de Medições</h2>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Peso (kg)</th>
+                        <th>IMC</th>
+                        <th>Gordura Corporal (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>10/05/2023</td>
+                        <td>68.5</td>
+                        <td>22.3</td>
+                        <td>18.2</td>
+                    </tr>
+                    <tr>
+                        <td>09/05/2023</td>
+                        <td>68.7</td>
+                        <td>22.4</td>
+                        <td>18.3</td>
+                    </tr>
+                    <tr>
+                        <td>08/05/2023</td>
+                        <td>69.2</td>
+                        <td>22.6</td>
+                        <td>18.5</td>
+                    </tr>
+                    <tr>
+                        <td>07/05/2023</td>
+                        <td>69.0</td>
+                        <td>22.5</td>
+                        <td>18.4</td>
+                    </tr>
+                    <tr>
+                        <td>06/05/2023</td>
+                        <td>69.7</td>
+                        <td>22.7</td>
+                        <td>18.7</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <footer>
+            <p>Esta é uma demonstração visual. A integração real com a Xiaomi Mi Scale 2 requer soluções de terceiros ou conhecimentos técnicos.</p>
+            <p>© 2023 - Dashboard de Saúde</p>
+        </footer>
+    </div>
+</body>
+</html>
